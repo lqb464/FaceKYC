@@ -1,0 +1,47 @@
+name: FaceKYC quality gates
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install core test and API dependencies
+        run: python -m pip install -e ".[dev,api]"
+
+      - name: Dependency check
+        run: python -m pip check
+
+      - name: Compile and lint
+        run: |
+          python -m compileall -q src/facekyc backend scripts
+          python -m ruff check src/facekyc backend frontend scripts tests
+
+      - name: Audit notebook structure and saved error outputs
+        run: python scripts/audit_notebooks.py --structure-only
+
+      - name: Unit and integration tests
+        run: python -m pytest
+
+      - name: Validate config while artifact is intentionally absent
+        run: python -m facekyc.console --allow-missing-artifact
+
+      - name: Validate Docker Compose
+        run: docker compose config --quiet
+
+      - name: Build frontend image
+        run: docker build -f frontend/Dockerfile -t facekyc-frontend:ci .
+
+      - name: Build API image
+        run: docker build -f backend/Dockerfile -t facekyc-api:ci .

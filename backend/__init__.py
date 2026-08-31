@@ -1,0 +1,1 @@
+"""FaceKYC FastAPI application."""

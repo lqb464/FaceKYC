@@ -1,0 +1,42 @@
+## Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+## Notebook/runtime
+.ipynb_checkpoints/
+mlruns/
+mlruns.db
+
+## Private biometric data and downloaded datasets
+data/raw/
+data/interim/
+data/processed/
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.mp4
+!docs/assets/*.png
+!docs/assets/*.jpg
+!docs/assets/*.svg
+
+## Model binaries and generated output
+artifacts/*.pt
+artifacts/*.pth
+artifacts/*.onnx
+artifacts/*.joblib
+outputs/
+reports/private/
+
+## Secrets / IDE / OS
+.env
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

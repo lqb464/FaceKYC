@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      FACEKYC_CORS_ORIGINS: "http://localhost:${FACEKYC_FRONTEND_PORT:-8504}"
+      FACEKYC_BUNDLE_PATH: /app/artifacts/facekyc_bundle.json
+      FACEKYC_ALLOW_CANDIDATE: "${FACEKYC_ALLOW_CANDIDATE:-false}"
+    volumes:
+      - ./artifacts:/app/artifacts:ro
+    ports:
+      - "${FACEKYC_API_PORT:-8004}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/live')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    environment:
+      FACEKYC_API_URL: http://api:8000
+    ports:
+      - "${FACEKYC_FRONTEND_PORT:-8504}:8501"
+    depends_on:
+      api:
+        condition: service_healthy

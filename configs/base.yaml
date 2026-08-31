@@ -1,0 +1,63 @@
+project:
+  name: "FaceKYC"
+  version: "1.0.0"
+  purpose: "1:1 face-verification signal with passive presentation-attack screening"
+
+input:
+  allowed_formats: ["JPEG", "PNG", "WEBP"]
+  max_file_bytes: 10000000
+  min_width: 160
+  min_height: 160
+  max_width: 6000
+  max_height: 6000
+  min_brightness: 35.0
+  max_brightness: 225.0
+  min_sharpness: 12.0
+
+detection:
+  image_size: 160
+  margin: 20
+  min_face_size: 40
+  min_probability: 0.90
+  thresholds: [0.6, 0.7, 0.7]
+  factor: 0.709
+  reject_multiple_faces: true
+
+verification:
+  architecture: "InceptionResnetV1"
+  pretrained_dataset: "vggface2"
+  score_name: "cosine_similarity"
+  threshold: null
+  uncertainty_margin: 0.025
+  calibration_target_fmr: 0.01
+
+liveness:
+  architecture: "mobilenet_v3_small"
+  experiment_candidates: ["mobilenet_v3_small", "resnet18"]
+  live_class_index: 1
+  input_size: 224
+  threshold: null
+  uncertainty_margin: 0.05
+  calibration_target_apcer: 0.05
+  weights_path: null
+  required: true
+
+decision:
+  review_on_input_warning: true
+  review_on_uncertain_score: true
+  low_similarity_action: "not_verified"
+  failed_pad_action: "not_verified"
+
+monitoring:
+  minimum_batch_size: 100
+  psi_warning: 0.10
+  psi_critical: 0.25
+  warning_rate_limit: 0.10
+  store_biometric_images: false
+  store_embeddings: false
+
+artifact:
+  bundle_path: "artifacts/facekyc_bundle.json"
+
+batch:
+  max_records: 1000

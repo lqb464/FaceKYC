@@ -1,0 +1,63 @@
+{
+  "created_at": "2026-08-31T04:59:25.041451+00:00",
+  "verification": {
+    "backbone": "vggface2",
+    "validation": {
+      "threshold": 0.4225261211395264,
+      "fmr": 0.01,
+      "fnmr": 0.04666666666666667,
+      "accuracy": 0.9716666666666667,
+      "auc": 0.9936222222222222,
+      "pairs": 600
+    },
+    "locked_holdout": {
+      "threshold": 0.4225261211395264,
+      "fmr": 0.006666666666666667,
+      "fnmr": 0.03666666666666667,
+      "accuracy": 0.9783333333333334,
+      "auc": 0.997411111111111,
+      "pairs": 600
+    }
+  },
+  "pad_proxy": {
+    "architecture": "mobilenet_v3_small",
+    "validation": {
+      "threshold": 0.7619086503982545,
+      "apcer": 0.05,
+      "bpcer": 0.0,
+      "acer": 0.025,
+      "accuracy": 0.975,
+      "auc": 0.99908125,
+      "samples": 800
+    },
+    "locked_holdout": {
+      "threshold": 0.7619086503982545,
+      "apcer": 0.05776892430278884,
+      "bpcer": 0.00099601593625498,
+      "acer": 0.02938247011952191,
+      "accuracy": 0.9706175298804781,
+      "auc": 0.9987103379311439,
+      "samples": 2008
+    }
+  },
+  "deployment_status": "candidate_research_only",
+  "holdout_accessed": true,
+  "holdout_evaluation_count": 1,
+  "screening_gates": {
+    "verification_fmr_le_0_02": true,
+    "verification_fnmr_le_0_20": true,
+    "pad_proxy_apcer_le_0_10": true,
+    "pad_proxy_bpcer_le_0_20": true
+  },
+  "screening_passed": true,
+  "artifact_integrity": {
+    "pad_checkpoint_sha256": "490a9c962d6b2262895a739a9507a000850fe6771c46cb01f54d0b99cb03d492"
+  },
+  "decision": "Proceed to MLE packaging as a research candidate only; production approval remains fail-closed pending target-domain verification and real PAD evaluation.",
+  "limitations": [
+    "LFW is not an ID-document/selfie benchmark for Vietnamese eKYC.",
+    "The ImageNet-pretrained PAD CNN was fine-tuned only on synthetic LFW-derived proxy attacks.",
+    "Synthetic PAD attacks do not measure resistance to real print, replay, mask or deepfake attacks.",
+    "No representative subgroup fairness audit or ISO/IEC 30107-3 certification."
+  ]
+}
